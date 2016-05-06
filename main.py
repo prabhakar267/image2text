@@ -2,7 +2,7 @@
 # @Author: prabhakar
 # @Date:   2016-05-03 20:05:15
 # @Last Modified by:   Prabhakar Gupta
-# @Last Modified time: 2016-05-06 15:58:55
+# @Last Modified time: 2016-05-07 00:17:45
 
 from PIL import Image
 from pytesser.pytesser import *
@@ -12,23 +12,29 @@ import os, os.path
 
 valid_images = [".jpg",".gif",".png",".tga",".tif",".bmp"]
 
+def create_directory(path):
+	if not os.path.exists(path):
+	    os.makedirs(path)
 
-# path = "/home/prabhakar/Pictures/Wallpapers"
-# image_file_name = sys.argv[1]
-# 
 
 path = sys.argv[1]
 directory_path = path + '/converted-text/'
 
-if not os.path.exists(directory_path):
-    os.makedirs(directory_path)
 
-count = 1
+count = 0
+other_files = 0
+
 for f in os.listdir(path):
 	ext = os.path.splitext(f)[1]
 	if ext.lower() not in valid_images:
+		other_files += 1
 		continue
 	else :
+
+		if count == 0:
+			create_directory(directory_path)
+
+		count += 1
 		image_file_name = path + '/' + f
 		
 		im = Image.open(image_file_name)
@@ -45,12 +51,10 @@ for f in os.listdir(path):
 		text_file.close()
 
 		print '----------------'
-		if count == 1:
-			print str(count) + ' file completed'
-		else:
-			print str(count) + ' files completed'
+		print str(count) + (" file" if count == 1 else " files") + " completed"
 		print '----------------'
-		
-		count += 1
-				# print text
 
+if count + other_files == 0:
+	print "No files found at your given location"
+else :
+	print str(count) + " / " + str(count + other_files) + " files converted"
