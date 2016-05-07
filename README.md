@@ -6,7 +6,13 @@ Python script to grab text from all the images in a directory and save a subdire
 python main.py <directory_path>
 ```
 
-## Screenshots
++ [Screenshot](#screenshot)
++ [Sample](/sample)
+ + [Sample image taken](#sample-image-taken)
+ + [Text output](#text-output)
++ [PyTesser](#pytesser)
+
+## Screenshot
 ![](/screenshots/Screenshot from 2016-05-07 19:27:05.png?raw=true)
 
 ## Sample
