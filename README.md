@@ -107,3 +107,18 @@ which is 1 followed by one googol of zeroes.
 
 
 ```
+
+## PyTesser
+PyTesser is an Optical Character Recognition module for Python. It takes 
+as input an image or image file and outputs a string.
+
+PyTesser uses the Tesseract OCR engine (an Open Source project at Google), 
+converting images to an accepted format and calling the Tesseract 
+executable as an external script. A Windows executable is provided 
+along with the Python scripts. The scripts should work in Linux as well. 
+
++ [PyTesser](http://code.google.com/p/pytesser/)
++ [Tesseract](http://code.google.com/p/tesseract-ocr/)
++ [README](/pytesser/README)
++ [LICENSE](/pytesser/LICENSE)
++ [NOTICE](/pytesser/NOTICE)
