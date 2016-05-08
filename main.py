@@ -2,7 +2,7 @@
 # @Author: prabhakar
 # @Date:   2016-05-03 20:05:15
 # @Last Modified by:   Prabhakar Gupta
-# @Last Modified time: 2016-05-08 23:52:05
+# @Last Modified time: 2016-05-08 23:55:01
 
 from PIL import Image
 from pytesser.pytesser import *
@@ -15,6 +15,13 @@ valid_images = [".jpg",".gif",".png",".tga",".tif",".bmp"]
 def create_directory(path):
 	if not os.path.exists(path):
 	    os.makedirs(path)
+
+
+def check_path(path):
+	if os.path.exists(path):
+		return True
+	else:
+		return False
 
 
 path = sys.argv[1]
@@ -61,4 +68,4 @@ if check_path(path):
 		print str(count) + " / " + str(count + other_files) + " files converted"
 
 else :
-	print("No directory found at \n {0}", format(path))
+	print "No directory found at " + format(path)
