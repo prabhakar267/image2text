@@ -1,21 +1,17 @@
-# Grab Text from an Image
+# Convert Image to Text
 
-Python script to grab text from all the images in a directory and save a subdirectory **(/converted-text)** as text files using **PyTesser module**. It is an Optical Character Recognition module for Python.
+Python wrapper to grab text from all the images in a directory and save a subdirectory as text files using [Tesseract Engine](https://github.com/tesseract-ocr/tesseract).
 
-```python
-python main.py <directory_path>
+> Tesseract is an optical character recognition engine for various operating systems. It is free software, released under the Apache License, Version 2.0, and development has been sponsored by Google since 2006. In 2006 Tesseract was considered one of the most accurate open-source OCR engines then available.
+
+### Usage 
+```
+[sudo] apt-get install tesseract-ocr
+```
+```
+python main.py "path/to/directory/of/images"
 ```
 
-+ [Screenshot](#screenshot)
-+ [Sample](/sample)
- + [Sample image taken](#sample-image-taken)
- + [Text output](#text-output)
-+ [PyTesser](#pytesser)
-
-## Screenshot
-![](/screenshots/Screenshot from 2016-05-07 19:27:05.png?raw=true)
-
-## Sample
 
 ### Sample image taken
 
@@ -113,18 +109,3 @@ which is 1 followed by one googol of zeroes.
 
 
 ```
-
-## PyTesser
-PyTesser is an Optical Character Recognition module for Python. It takes 
-as input an image or image file and outputs a string.
-
-PyTesser uses the Tesseract OCR engine (an Open Source project at Google), 
-converting images to an accepted format and calling the Tesseract 
-executable as an external script. A Windows executable is provided 
-along with the Python scripts. The scripts should work in Linux as well. 
-
-+ [PyTesser](http://code.google.com/p/pytesser/)
-+ [Tesseract](http://code.google.com/p/tesseract-ocr/)
-+ [README](/pytesser/README)
-+ [LICENSE](/pytesser/LICENSE)
-+ [NOTICE](/pytesser/NOTICE)
