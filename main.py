@@ -13,7 +13,9 @@ def check_path(path):
 	return bool(os.path.exists(path))
 
 def main(path):
-	if check_path(path):
+	if call(['which', 'tesseract']):
+		print "tesseract-ocr missing, use sudo apt-get install tesseract-ocr to resolve"
+	elif check_path(path):
 		directory_path = path + '/converted-text/'
 
 		count = 0
