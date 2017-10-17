@@ -5,6 +5,11 @@ from subprocess import call
 VALID_IMAGES = [".jpg",".gif",".png",".tga",".tif",".bmp"]
 FNULL = open(os.devnull, 'w')
 
+class ArgumentMissingException(Exception):
+	def __init__(self):
+		print("usage: {} <dirname>".format(sys.argv[0]))
+		sys.exit(1)
+
 def create_directory(path):
 	if not os.path.exists(path):
 	    os.makedirs(path)
@@ -49,6 +54,8 @@ def main(path):
 		print "No directory found at " + format(path)
 
 if __name__ == '__main__':
+	if len(sys.argv) != 2:
+		raise ArgumentMissingException
 	path = sys.argv[1]
 	path = os.path.abspath(path)
 	main(path)
