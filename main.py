@@ -14,7 +14,7 @@ def check_path(path):
 
 def main(path):
 	if call(['which', 'tesseract']):
-		print "tesseract-ocr missing, use sudo apt-get install tesseract-ocr to resolve"
+		print("tesseract-ocr missing, use sudo apt-get install tesseract-ocr to resolve")
 	elif check_path(path):
 		directory_path = path + '/converted-text/'
 
@@ -39,14 +39,14 @@ def main(path):
 
 				call(["tesseract", image_file_name, text_file_path], stdout=FNULL)
 
-				print str(count) + (" file" if count == 1 else " files") + " completed"
+				print(str(count) + (" file" if count == 1 else " files") + " completed")
 
 		if count + other_files == 0:
-			print "No files found at your given location"
+			print("No files found at your given location")
 		else :
-			print str(count) + " / " + str(count + other_files) + " files converted"
+			print(str(count) + " / " + str(count + other_files) + " files converted")
 	else :
-		print "No directory found at " + format(path)
+		print("No directory found at " + format(path))
 
 if __name__ == '__main__':
 	path = sys.argv[1]
