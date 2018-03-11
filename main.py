@@ -1,6 +1,7 @@
 import sys
 import os
 from subprocess import call
+import argparse
 
 VALID_IMAGES = [".jpg",".gif",".png",".tga",".tif",".bmp"]
 FNULL = open(os.devnull, 'w')
@@ -54,8 +55,8 @@ def main(path):
 		print("No directory found at " + format(path))
 
 if __name__ == '__main__':
-	if len(sys.argv) != 2:
-		raise ArgumentMissingException
-	path = sys.argv[1]
-	path = os.path.abspath(path)
+	parser = argparse.ArgumentParser()
+	parser.add_argument("input_dir")
+	args = parser.parse_args()
+	path = os.path.abspath(args.input_dir)
 	main(path)
