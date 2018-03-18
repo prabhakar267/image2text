@@ -18,11 +18,10 @@ def create_directory(path):
 def check_path(path):
 	return bool(os.path.exists(path))
 
-def main(path):
+def main(path, directory_path):
 	if call(['which', 'tesseract']):
 		print("tesseract-ocr missing, use sudo apt-get install tesseract-ocr to resolve")
 	elif check_path(path):
-		directory_path = path + '/converted-text/'
 
 		count = 0
 		other_files = 0
@@ -57,6 +56,11 @@ def main(path):
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser()
 	parser.add_argument("input_dir")
+	parser.add_argument('output_dir', nargs='?')
 	args = parser.parse_args()
 	path = os.path.abspath(args.input_dir)
-	main(path)
+	if args.output_dir:
+		directory_path = os.path.abspath(args.output_dir) + '/'
+	else:
+		directory_path = path + '/converted-text/'
+	main(path, directory_path)
