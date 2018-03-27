@@ -9,8 +9,9 @@ Python wrapper to grab text from all the images in a directory and save a subdir
 [sudo] apt-get install tesseract-ocr
 ```
 ```
-python main.py "path/to/directory/of/images"
+python main.py "path/to/directory/of/images" [-o "path/to/output/text"]
 ```
+if `-o` is not specified, the text files will be output to "(current_working_directory)/converted-text"
 
 
 ### Sample image taken
