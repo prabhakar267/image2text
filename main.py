@@ -18,15 +18,15 @@ def create_directory(path):
 def check_path(path):
 	return bool(os.path.exists(path))
 
-def main(path, directory_path):
+def main(input_path, output_path):
 	if call(['which', 'tesseract']):
 		print("tesseract-ocr missing, use sudo apt-get install tesseract-ocr to resolve")
-	elif check_path(path):
+	elif check_path(input_path):
 
 		count = 0
 		other_files = 0
 
-		for f in os.listdir(path):
+		for f in os.listdir(input_path):
 			ext = os.path.splitext(f)[1]
 
 			if ext.lower() not in VALID_IMAGES:
@@ -35,12 +35,12 @@ def main(path, directory_path):
 			else :
 
 				if count == 0:
-					create_directory(directory_path)
+					create_directory(output_path)
 				count += 1
-				image_file_name = path + '/' + f
+				image_file_name = os.path.join(input_path, f)
 				filename = os.path.splitext(f)[0]
 				filename = ''.join(e for e in filename if e.isalnum() or e == '-')
-				text_file_path = directory_path + filename
+				text_file_path = os.path.join(output_path, filename)
 
 				call(["tesseract", image_file_name, text_file_path], stdout=FNULL)
 
@@ -51,16 +51,16 @@ def main(path, directory_path):
 		else :
 			print(str(count) + " / " + str(count + other_files) + " files converted")
 	else :
-		print("No directory found at " + format(path))
+		print("No directory found at " + format(input_path))
 
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser()
-	parser.add_argument("input_dir")
-	parser.add_argument('output_dir', nargs='?')
+	parser.add_argument("input_dir", help="Input directory where input images are stored")
+	parser.add_argument('output_dir', nargs='?', help="(Optional) Output directory to store converted text (default: {input_path}/converted-text)")
 	args = parser.parse_args()
-	path = os.path.abspath(args.input_dir)
+	input_path = os.path.abspath(args.input_dir)
 	if args.output_dir:
-		directory_path = os.path.abspath(args.output_dir) + '/'
+		output_path = os.path.abspath(args.output_dir)
 	else:
-		directory_path = path + '/converted-text/'
-	main(path, directory_path)
+		output_path = os.path.join(input_path,'converted-text')
+	main(input_path, output_path)
