@@ -13,15 +13,6 @@ Python wrapper to grab text from all the images in a directory and save a subdir
 #### Windows
 1. Install tesseract-ocr from UB Mannheim here: https://github.com/UB-Mannheim/tesseract/wiki
 2. Add the installed Tesseract-OCR directory path to PATH system variable  
-3. Edit the line in main.py from
-    ```
-    if call(['which', 'tesseract']):
-    ```
-    to
-    ```
-    if call(['where', 'tesseract']):
-    ```
-
 #### Run
 ```
 python main.py <input_directory> <output_directory>

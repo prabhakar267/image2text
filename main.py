@@ -19,7 +19,10 @@ def check_path(path):
 	return bool(os.path.exists(path))
 
 def main(input_path, output_path):
-	if call(['which', 'tesseract']):
+	command_check = 'which' 
+	if (sys.platform.startswith('win')):
+		command_check = 'where'
+	if call([command_check, 'tesseract']):
 		print("tesseract-ocr missing, use sudo apt-get install tesseract-ocr to resolve")
 	elif check_path(input_path):
 
