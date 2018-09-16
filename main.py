@@ -3,7 +3,7 @@ import os
 from subprocess import call
 import argparse
 
-VALID_IMAGES = [".jpg",".gif",".png",".tga",".tif",".bmp"]
+VALID_IMAGES = [".jpg",".jpeg",".gif",".png",".tga",".tif",".bmp"]
 FNULL = open(os.devnull, 'w')
 
 class ArgumentMissingException(Exception):
