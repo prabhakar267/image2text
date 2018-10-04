@@ -9,7 +9,6 @@ import mock
 def side_effect(value):
     return value
 
-# os.makedirs = MagicMock(return True)
 class TestCore(unittest.TestCase):
     def test_setup(self):
         from mock import call
