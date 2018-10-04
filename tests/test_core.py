@@ -1,6 +1,5 @@
 from __future__ import print_function
 import unittest
-from unittest.mock import MagicMock
 from main import main
 import builtins
 import mock
