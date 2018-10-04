@@ -29,6 +29,9 @@ optional arguments:
 ```
 output_dir is optional. Defaults to input_dir + '/converted_text/'
 
+#### Run Tests
+`python -m unittest tests.test_core`
+
 ### Example
 ```
 python main.py sample/
@@ -138,4 +141,6 @@ which is 1 followed by one googol of zeroes.
 ### Stargazers over time
 
 [![Stargazers over time](https://starcharts.herokuapp.com/prabhakar267/ocr-convert-image-to-text.svg)](https://starcharts.herokuapp.com/prabhakar267/ocr-convert-image-to-text)
+
+
       
