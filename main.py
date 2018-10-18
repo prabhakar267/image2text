@@ -79,9 +79,9 @@ def main(input_path, output_path):
         image_file_name = os.path.join(input_path, filename)
         filename_without_extension = os.path.splitext(filename)[0]
         text_file_path = os.path.join(output_path, filename_without_extension)
-        _ = subprocess.run(['tesseract', image_file_name, text_file_path],
-                           stdout=subprocess.PIPE,
-                           stderr=subprocess.PIPE)
+        subprocess.run(['tesseract', image_file_name, text_file_path],
+                       stdout=subprocess.PIPE,
+                       stderr=subprocess.PIPE)
         logging.debug("Successfully parsed {}".format(filename))
         successful_files += 1
 
