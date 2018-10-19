@@ -7,8 +7,6 @@ import sys
 from constants import DEFAULT_OUTPUT_DIRECTORY_NAME, VALID_IMAGE_EXTENSIONS, WINDOWS_CHECK_COMMAND, \
     DEFAULT_CHECK_COMMAND
 
-logging.getLogger().setLevel(logging.INFO)
-
 
 def create_directory(path):
     """
@@ -99,6 +97,8 @@ if __name__ == '__main__':
     parser.add_argument('--input_dir', help="Input directory where input images are stored", required=True)
     parser.add_argument('--output_dir', nargs='?',
                         help="(Optional) Output directory for converted text (default: {input_path}/converted-text)")
+    parser.add_argument('--debug', action='store_true',
+                        help="Enable verbose DEBUG logging")
     args = parser.parse_args()
 
     input_path = os.path.abspath(args.input_dir)
@@ -106,5 +106,8 @@ if __name__ == '__main__':
         output_path = os.path.abspath(args.output_dir)
     else:
         output_path = os.path.join(input_path, DEFAULT_OUTPUT_DIRECTORY_NAME)
-
+    if args.debug:
+        logging.getLogger().setLevel(logging.DEBUG)
+    else:
+        logging.getLogger().setLevel(logging.INFO)
     main(input_path, output_path)
