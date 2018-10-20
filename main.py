@@ -36,47 +36,52 @@ def get_command():
         return WINDOWS_CHECK_COMMAND
     return DEFAULT_CHECK_COMMAND
 
-def check_pre_requisites_tesseract():
-	"""
-	Check if the pre-requisites required for running the tesseract application are satisfied or not
-	:param : NA
-	:return: boolean
-	"""	
-	check_command = get_command()
-	logging.debug("Running `{}` to check if tesseract is installed or not.".format(check_command))
-	result = subprocess.run([check_command, 'tesseract'], stdout=subprocess.PIPE)
-	if not result.stdout:
-		logging.error("tesseract-ocr missing, use install `tesseract` to resolve.")
-		return False
-	logging.debug("Tesseract correctly installed!\n")
 
-	if sys.platform.startswith('win'):
-		environment_variables = os.environ
-		logging.debug("Checking if the Tesseract Data path is set correctly or not.\n")
-		if TESSERACT_DATA_PATH_VAR in environment_variables:
-			if environment_variables[TESSERACT_DATA_PATH_VAR]:
-				path = environment_variables[TESSERACT_DATA_PATH_VAR]
-				logging.debug("Checking if the path configured for Tesseract Data Environment variable `{}` as `{}` is valid or not.".format(TESSERACT_DATA_PATH_VAR, path))
-				if os.path.isdir(path) and os.access(path, os.R_OK):
-					logging.debug("All set to go!")
-					return True
-				else:
-					logging.error("Configured path for Tesseract data is not accessible!")
-					return False
-			else:
-				logging.error("Tesseract Data path Environment variable '{}' configured to an empty string!".format(TESSERACT_DATA_PATH_VAR))
-				return False
-		else:
-			logging.error("Tesseract Data path Environment variable '{}' needs to be configured to point to the tessdata!".format(TESSERACT_DATA_PATH_VAR))
-			return False		
-	else:
-		return True
+def check_pre_requisites_tesseract():
+    """
+    Check if the pre-requisites required for running the tesseract application are satisfied or not
+    :param : NA
+    :return: boolean
+    """
+    check_command = get_command()
+    logging.debug("Running `{}` to check if tesseract is installed or not.".format(check_command))
+    result = subprocess.run([check_command, 'tesseract'], stdout=subprocess.PIPE)
+    if not result.stdout:
+        logging.error("tesseract-ocr missing, use install `tesseract` to resolve.")
+        return False
+    logging.debug("Tesseract correctly installed!\n")
+
+    if sys.platform.startswith('win'):
+        environment_variables = os.environ
+        logging.debug("Checking if the Tesseract Data path is set correctly or not.\n")
+        if TESSERACT_DATA_PATH_VAR in environment_variables:
+            if environment_variables[TESSERACT_DATA_PATH_VAR]:
+                path = environment_variables[TESSERACT_DATA_PATH_VAR]
+                logging.debug("Checking if the path configured for Tesseract Data Environment variable `{}` \
+                as `{}` is valid or not.".format(TESSERACT_DATA_PATH_VAR, path))
+                if os.path.isdir(path) and os.access(path, os.R_OK):
+                    logging.debug("All set to go!")
+                    return True
+                else:
+                    logging.error("Configured path for Tesseract data is not accessible!")
+                    return False
+            else:
+                logging.error("Tesseract Data path Environment variable '{}' configured to an empty string!\
+                ".format(TESSERACT_DATA_PATH_VAR))
+                return False
+        else:
+            logging.error("Tesseract Data path Environment variable '{}' needs to be configured to point to\
+            the tessdata!".format(TESSERACT_DATA_PATH_VAR))
+            return False
+    else:
+        return True
+
 
 def main(input_path, output_path):
     # Check if tesseract is installed or not
     if not check_pre_requisites_tesseract():
-	    return
-		
+        return
+
     # Check if a valid input directory is given or not
     if not check_path(input_path):
         logging.error("No directory found at `{}`".format(input_path))
