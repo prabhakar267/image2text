@@ -75,9 +75,8 @@ def check_pre_requisites_tesseract():
             return False
     else:
         return True
-
-
-def main(input_path, output_path):
+    
+def main(input_path, output_path, file_name):
     # Check if tesseract is installed or not
     if not check_pre_requisites_tesseract():
         return
@@ -88,7 +87,10 @@ def main(input_path, output_path):
         return
 
     # Check if input directory is empty or not
-    total_file_count = len(os.listdir(input_path))
+    if not file_name:
+        total_file_count = len(os.listdir(input_path))
+    else:
+        total_file_count = 1
     if total_file_count == 0:
         logging.error("No files found at your input location")
         return
@@ -101,7 +103,12 @@ def main(input_path, output_path):
     other_files = 0
     successful_files = 0
     logging.info("Found total {} file(s)\n".format(total_file_count))
-    for ctr, filename in enumerate(os.listdir(input_path)):
+
+    if not file_name:
+        filenames = os.listdir(input_path)
+    else:
+        filenames = [str(file_name)]
+    for filename in filenames:
         logging.debug("Parsing {}".format(filename))
         extension = os.path.splitext(filename)[1]
 
@@ -129,14 +136,28 @@ def main(input_path, output_path):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--input_dir', help="Input directory where input images are stored", required=True)
+    parser.add_argument('--input_file', help="Input image file")
+    parser.add_argument('--input_dir', help="Input directory where input images are stored")
     parser.add_argument('--output_dir', nargs='?',
                         help="(Optional) Output directory for converted text (default: {input_path}/converted-text)")
     parser.add_argument('--debug', action='store_true',
                         help="Enable verbose DEBUG logging")
     args = parser.parse_args()
 
-    input_path = os.path.abspath(args.input_dir)
+    if not (args.input_dir or args.input_file):
+        parser.error("Provide atleast one input argument")
+        
+    if args.input_dir and args.input_file:
+        parser.error("Provide only one input argument")
+    
+    if args.input_file:
+        input_file = args.input_file
+        input_path = os.path.dirname(os.path.abspath(args.input_file))    
+        
+    else:
+        input_file = None
+        input_path = os.path.abspath(args.input_dir)
+        
     if args.output_dir:
         output_path = os.path.abspath(args.output_dir)
     else:
@@ -145,4 +166,6 @@ if __name__ == '__main__':
         logging.getLogger().setLevel(logging.DEBUG)
     else:
         logging.getLogger().setLevel(logging.INFO)
-    main(input_path, output_path)
+
+    main(input_path, output_path, input_file)
+    
