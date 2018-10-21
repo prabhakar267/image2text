@@ -35,6 +35,13 @@ def get_command():
         return WINDOWS_CHECK_COMMAND
     return DEFAULT_CHECK_COMMAND
 
+def run_tesseract(filename,output_path,image_file_name):
+    #Run tesseract
+    filename_without_extension = os.path.splitext(filename)[0]
+    text_file_path = os.path.join(output_path, filename_without_extension)
+    subprocess.run(['tesseract',image_file_name, text_file_path],
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE)
 
 def main(input_path, output_path):
     # Check if tesseract is installed or not
@@ -62,8 +69,6 @@ def main(input_path, output_path):
             logging.error("No files found at your input location")
             return
 
-        
-
         # Iterate over all images in the input directory
         # and get text from each image
         other_files = 0
@@ -78,12 +83,7 @@ def main(input_path, output_path):
                 continue
 
             image_file_name = os.path.join(input_path, filename)
-            filename_without_extension = os.path.splitext(filename)[0]
-            text_file_path = os.path.join(output_path, filename_without_extension)
-            subprocess.run(['tesseract', image_file_name, text_file_path],
-                           stdout=subprocess.PIPE,
-                           stderr=subprocess.PIPE)
-            logging.debug("Successfully parsed {}".format(filename))
+            run_tesseract(filename, output_path, image_file_name)
             successful_files += 1
 
         logging.info("Parsing Completed!\n")
@@ -93,31 +93,28 @@ def main(input_path, output_path):
         else:
             logging.info("Successfully parsed images: {}".format(successful_files))
             logging.info("Files with unsupported file extensions: {}".format(other_files))
+            
     else:
         filename = os.path.basename(input_path)
-        filename_without_extension = os.path.splitext(filename)[0]
-        text_file_path = os.path.join(output_path, filename_without_extension)
-        subprocess.run(['tesseract', filename, text_file_path],
-                           stdout=subprocess.PIPE,
-                           stderr=subprocess.PIPE)
+        run_tesseract(filename, output_path, filename)
+
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--input_dir', help="Input directory where input images are stored")
-    parser.add_argument('--file', help="Input image")
+    parser.add_argument('--input_file', help="Input image filepath")
     parser.add_argument('--output_dir', nargs='?',
                         help="(Optional) Output directory for converted text (default: {input_path}/converted-text)")
     parser.add_argument('--debug', action='store_true',
                         help="Enable verbose DEBUG logging")
-    # parser.add_argument('--file',)
     args = parser.parse_args()
-    if not args.input_dir and not args.file:
-        parser.error('Required either --file or --input_dir')
+    if not args.input_dir and not args.input_file:
+        parser.error('Required either --input_file or --input_dir')
     if args.input_dir:
         input_path = os.path.abspath(args.input_dir)
     else:
-        input_path = os.path.abspath(args.file)
+        input_path = os.path.abspath(args.input_file)
     if args.output_dir:
         output_path = os.path.abspath(args.output_dir)
     else:
