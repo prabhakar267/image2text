@@ -15,7 +15,8 @@ def create_directory(path):
     :return:
     """
     if not os.path.exists(path):
-            os.makedirs(path)
+        os.makedirs(path)
+
 
 def check_path(path):
     """
@@ -35,21 +36,26 @@ def get_command():
         return WINDOWS_CHECK_COMMAND
     return DEFAULT_CHECK_COMMAND
 
-def run_tesseract(filename,output_path,image_file_name):
-    #Run tesseract
+
+def run_tesseract(filename, output_path, image_file_name):
+    # Run tesseract
     filename_without_extension = os.path.splitext(filename)[0]
     text_file_path = os.path.join(output_path, filename_without_extension)
-    subprocess.run(['tesseract',image_file_name, text_file_path],
-                    stdout=subprocess.PIPE,
-                    stderr=subprocess.PIPE)
+    subprocess.run(['tesseract', image_file_name, text_file_path],
+                   stdout=subprocess.PIPE,
+                   stderr=subprocess.PIPE)
+
 
 def main(input_path, output_path):
     # Check if tesseract is installed or not
     check_command = get_command()
-    logging.debug("Running `{}` to check if tesseract is installed or not.".format(check_command))
-    result = subprocess.run([check_command, 'tesseract'], stdout=subprocess.PIPE)
+    logging.debug(
+        "Running `{}` to check if tesseract is installed or not.".format(check_command))
+    result = subprocess.run(
+        [check_command, 'tesseract'], stdout=subprocess.PIPE)
     if not result.stdout:
-        logging.error("tesseract-ocr missing, use install `tesseract` to resolve.")
+        logging.error(
+            "tesseract-ocr missing, use install `tesseract` to resolve.")
         return
     logging.debug("Tesseract correctly installed!\n")
 
@@ -59,8 +65,8 @@ def main(input_path, output_path):
         return
     # Create output directory
     create_directory(output_path)
-    
-    #Check if input_path is directory or file      
+
+    # Check if input_path is directory or file
     if os.path.isdir(input_path):
 
         # Check if input directory is empty or not
@@ -89,20 +95,23 @@ def main(input_path, output_path):
         logging.info("Parsing Completed!\n")
         if successful_files == 0:
             logging.error("No valid image file found.")
-            logging.error("Supported formats: [{}]".format(", ".join(VALID_IMAGE_EXTENSIONS)))
+            logging.error("Supported formats: [{}]".format(
+                ", ".join(VALID_IMAGE_EXTENSIONS)))
         else:
-            logging.info("Successfully parsed images: {}".format(successful_files))
-            logging.info("Files with unsupported file extensions: {}".format(other_files))
-            
+            logging.info(
+                "Successfully parsed images: {}".format(successful_files))
+            logging.info(
+                "Files with unsupported file extensions: {}".format(other_files))
+
     else:
         filename = os.path.basename(input_path)
         run_tesseract(filename, output_path, filename)
 
 
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--input_dir', help="Input directory where input images are stored")
+    parser.add_argument(
+        '--input_dir', help="Input directory where input images are stored")
     parser.add_argument('--input_file', help="Input image filepath")
     parser.add_argument('--output_dir', nargs='?',
                         help="(Optional) Output directory for converted text (default: {input_path}/converted-text)")
@@ -119,11 +128,11 @@ if __name__ == '__main__':
         output_path = os.path.abspath(args.output_dir)
     else:
         if os.path.isdir(input_path):
-            output_path = os.path.join(input_path, DEFAULT_OUTPUT_DIRECTORY_NAME)
+            output_path = os.path.join(
+                input_path, DEFAULT_OUTPUT_DIRECTORY_NAME)
         else:
             dir_path = os.path.dirname(input_path)
             output_path = os.path.join(dir_path, DEFAULT_OUTPUT_DIRECTORY_NAME)
-
 
     if args.debug:
         logging.getLogger().setLevel(logging.DEBUG)
