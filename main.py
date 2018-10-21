@@ -148,7 +148,7 @@ if __name__ == '__main__':
     if args.file_name:
         file_name = args.file_name
     else:
-        file_name=None
+        file_name = None
     if args.debug:
         logging.getLogger().setLevel(logging.DEBUG)
     else:
