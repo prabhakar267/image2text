@@ -5,7 +5,7 @@ from unittest import mock
 import main as puc
 from constants import WINDOWS_CHECK_COMMAND
 
-resources_directory = "resources"
+resources_directory = "tests/resources"
 
 
 class TestMain(unittest.TestCase):
