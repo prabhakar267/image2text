@@ -5,7 +5,7 @@ from unittest import mock
 import main as puc
 from constants import WINDOWS_CHECK_COMMAND
 
-resources_directory = "tests/resources"
+resources_directory = "resources"
 
 
 class TestMain(unittest.TestCase):
@@ -37,7 +37,7 @@ class TestMain(unittest.TestCase):
         mock_subprocess_run.return_value.stdout = False
 
         empty_directory_location = os.path.join(resources_directory, "empty_directory")
-        response = puc.main(empty_directory_location, resources_directory)
+        response = puc.main(empty_directory_location, resources_directory, None)
         self.assertIsNone(response)
 
     @mock.patch('main.subprocess.run')
@@ -46,7 +46,7 @@ class TestMain(unittest.TestCase):
         mock_subprocess_run.return_value.stdout = True
 
         empty_directory_location = os.path.join(resources_directory, "empty_directory")
-        response = puc.main(empty_directory_location, resources_directory)
+        response = puc.main(empty_directory_location, resources_directory, None)
         self.assertIsNone(response)
 
     @mock.patch('main.subprocess.run')
@@ -55,7 +55,7 @@ class TestMain(unittest.TestCase):
         mock_subprocess_run.return_value.stdout = True
 
         empty_directory_location = os.path.join(resources_directory, "not_existing_empty_directory")
-        response = puc.main(empty_directory_location, resources_directory)
+        response = puc.main(empty_directory_location, resources_directory, None)
         self.assertIsNone(response)
 
     @mock.patch('main.subprocess.run')
@@ -64,7 +64,7 @@ class TestMain(unittest.TestCase):
 
         directory = os.path.join(resources_directory, "test_directory")
         output_directory = os.path.join(directory, 'output')
-        puc.main(directory, output_directory)
+        puc.main(directory, output_directory, None)
         self.assertTrue(os.path.isdir(output_directory))
 
         # cleanup

@@ -77,18 +77,20 @@ def check_pre_requisites_tesseract():
         return True
 
 
-def main(input_path, output_path):
+def main(input_path, output_path, file_name):
     # Check if tesseract is installed or not
     if not check_pre_requisites_tesseract():
         return
 
+    file_specified = file_name is not None
+
     # Check if a valid input directory is given or not
     if not check_path(input_path):
-        logging.error("No directory found at `{}`".format(input_path))
+        logging.error("No {} found at `{}`".format("file" if file_specified else "directory", input_path))
         return
 
     # Check if input directory is empty or not
-    total_file_count = len(os.listdir(input_path))
+    total_file_count = 1 if file_specified else len(os.listdir(input_path))
     if total_file_count == 0:
         logging.error("No files found at your input location")
         return
@@ -96,12 +98,12 @@ def main(input_path, output_path):
     # Create output directory
     create_directory(output_path)
 
-    # Iterate over all images in the input directory
+    # Iterate over all images in the input directory in case file_name argument is not specified
     # and get text from each image
     other_files = 0
     successful_files = 0
     logging.info("Found total {} file(s)\n".format(total_file_count))
-    for ctr, filename in enumerate(os.listdir(input_path)):
+    for ctr, filename in enumerate([file_name]) if file_specified else enumerate(os.listdir(input_path)):
         logging.debug("Parsing {}".format(filename))
         extension = os.path.splitext(filename)[1]
 
@@ -130,6 +132,8 @@ def main(input_path, output_path):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--input_dir', help="Input directory where input images are stored", required=True)
+    parser.add_argument('--file_name', nargs='?',
+                        help="(Optional) Image file name")
     parser.add_argument('--output_dir', nargs='?',
                         help="(Optional) Output directory for converted text (default: {input_path}/converted-text)")
     parser.add_argument('--debug', action='store_true',
@@ -141,8 +145,12 @@ if __name__ == '__main__':
         output_path = os.path.abspath(args.output_dir)
     else:
         output_path = os.path.join(input_path, DEFAULT_OUTPUT_DIRECTORY_NAME)
+    if args.file_name:
+        file_name = args.file_name
+    else:
+        file_name=None
     if args.debug:
         logging.getLogger().setLevel(logging.DEBUG)
     else:
         logging.getLogger().setLevel(logging.INFO)
-    main(input_path, output_path)
+    main(input_path, output_path, file_name)
