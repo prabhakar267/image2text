@@ -8,12 +8,12 @@ Python wrapper to grab text from all the images in a directory and save a subdir
 ## Usage
 #### Run
 ```
-python main.py <input_directory> <output_directory>
+python main.py --input_dir <input_directory> --output_dir <output_directory>
 ```
 ```
-usage: main.py [-h] input_dir [output_dir]
+main.py [-h] [--input_dir INPUT_DIR] [--input_file INPUT_FILE] [--output_dir [OUTPUT_DIR]] [--debug]
 
-positional arguments:
+required arguments:
   input_dir
   output_dir
 
