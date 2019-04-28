@@ -53,14 +53,13 @@ def check_pre_requisites_tesseract():
     :return: boolean
     """
     check_command = get_command()
-    logging.debug(
-        "Running `{}` to check if tesseract is installed or not.".format(check_command))
-    result = subprocess.run(
-        [check_command, 'tesseract'], stdout=subprocess.PIPE)
+    logging.debug("Running `{}` to check if tesseract is installed or not.".format(check_command))
+
+    result = subprocess.run([check_command, 'tesseract'], stdout=subprocess.PIPE)
     if not result.stdout:
-        logging.error(
-            "tesseract-ocr missing, use install `tesseract` to resolve.")
+        logging.error("tesseract-ocr missing, install `tesseract` to resolve. Refer to README for more instructions.")
         return False
+
     logging.debug("Tesseract correctly installed!\n")
 
     if sys.platform.startswith('win'):
@@ -147,26 +146,25 @@ def main(input_path, output_path):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        '--input_dir', help="Input directory where input images are stored")
+    parser.add_argument('--input_dir', help="Input directory where input images are stored")
     parser.add_argument('--input_file', help="Input image filepath")
-    parser.add_argument('--output_dir', nargs='?',
-                        help="(Optional) Output directory for converted text (default: {input_path}/converted-text)")
-    parser.add_argument('--debug', action='store_true',
-                        help="Enable verbose DEBUG logging")
+    parser.add_argument('--output_dir', help="(Optional) Output directory for converted text")
+    parser.add_argument('--debug', action='store_true', help="Enable verbose DEBUG logging")
+
     args = parser.parse_args()
     if not args.input_dir and not args.input_file:
         parser.error('Required either --input_file or --input_dir')
+
     if args.input_dir:
         input_path = os.path.abspath(args.input_dir)
     else:
         input_path = os.path.abspath(args.input_file)
+
     if args.output_dir:
         output_path = os.path.abspath(args.output_dir)
     else:
         if os.path.isdir(input_path):
-            output_path = os.path.join(
-                input_path, DEFAULT_OUTPUT_DIRECTORY_NAME)
+            output_path = os.path.join(input_path, DEFAULT_OUTPUT_DIRECTORY_NAME)
         else:
             dir_path = os.path.dirname(input_path)
             output_path = os.path.join(dir_path, DEFAULT_OUTPUT_DIRECTORY_NAME)
@@ -175,4 +173,11 @@ if __name__ == '__main__':
         logging.getLogger().setLevel(logging.DEBUG)
     else:
         logging.getLogger().setLevel(logging.INFO)
+
+    # Check Python version
+    if sys.version_info[0] < 3:
+        logging.error("You are using Python {0}.{1}. Please use Python>=3".format(
+            sys.version_info[0], sys.version_info[1]))
+        exit()
+
     main(input_path, output_path)
