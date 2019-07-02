@@ -1,5 +1,6 @@
 # Convert Image to Text
 [![Build Status](https://api.travis-ci.org/prabhakar267/ocr-convert-image-to-text.svg?branch=master)](https://travis-ci.org/prabhakar267/ocr-convert-image-to-text)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fprabhakar267%2Focr-convert-image-to-text.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fprabhakar267%2Focr-convert-image-to-text?ref=badge_shield)
 
 Python wrapper to grab text from all the images in a directory and save a subdirectory as text files using [Tesseract Engine](https://github.com/tesseract-ocr/tesseract).
 
@@ -149,3 +150,7 @@ which is 1 followed by one googol of zeroes.
 
 
       
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fprabhakar267%2Focr-convert-image-to-text.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fprabhakar267%2Focr-convert-image-to-text?ref=badge_large)
