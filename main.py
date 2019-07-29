@@ -102,7 +102,6 @@ def main(input_path, output_path, no_output_directory=False):
     # Create output directory
     create_directory(output_path)
 
-
     # Check if input_path is directory or file
     if os.path.isdir(input_path):
 
