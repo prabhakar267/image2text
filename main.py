@@ -90,7 +90,7 @@ def check_pre_requisites_tesseract():
         return True
 
 
-def main(input_path, output_path):
+def main(input_path, output_path, no_output_directory):
     # Check if tesseract is installed or not
     if not check_pre_requisites_tesseract():
         return
@@ -101,6 +101,7 @@ def main(input_path, output_path):
         return
     # Create output directory
     create_directory(output_path)
+
 
     # Check if input_path is directory or file
     if os.path.isdir(input_path):
@@ -138,6 +139,9 @@ def main(input_path, output_path):
                 "Successfully parsed images: {}".format(successful_files))
             logging.info(
                 "Files with unsupported file extensions: {}".format(other_files))
+            if no_output_directory:
+                for file in os.listdir('{}/converted-text'.format(input_path)):
+                    with open('{}/converted-text/{}'.format(input_path, file), 'r', encoding="utf8") as text: print(text.read())
 
     else:
         filename = os.path.basename(input_path)
@@ -161,8 +165,10 @@ if __name__ == '__main__':
         input_path = os.path.abspath(args.input_file)
 
     if args.output_dir:
+        no_output_directory = False
         output_path = os.path.abspath(args.output_dir)
     else:
+        no_output_directory = True
         if os.path.isdir(input_path):
             output_path = os.path.join(input_path, DEFAULT_OUTPUT_DIRECTORY_NAME)
         else:
@@ -180,4 +186,4 @@ if __name__ == '__main__':
             sys.version_info[0], sys.version_info[1]))
         exit()
 
-    main(input_path, output_path)
+    main(input_path, output_path, no_output_directory)
