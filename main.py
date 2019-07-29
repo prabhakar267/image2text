@@ -90,7 +90,7 @@ def check_pre_requisites_tesseract():
         return True
 
 
-def main(input_path, output_path, no_output_directory):
+def main(input_path, output_path, no_output_directory=False):
     # Check if tesseract is installed or not
     if not check_pre_requisites_tesseract():
         return
@@ -186,4 +186,4 @@ if __name__ == '__main__':
             sys.version_info[0], sys.version_info[1]))
         exit()
 
-    main(input_path, output_path, no_output_directory)
+    main(input_path, output_path, no_output_directory=no_output_directory)
