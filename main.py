@@ -1,13 +1,12 @@
 import argparse
 import logging
 import os
+import shutil
 import subprocess
 import sys
 import tempfile
-import shutil
 
-from constants import DEFAULT_OUTPUT_DIRECTORY_NAME, VALID_IMAGE_EXTENSIONS, WINDOWS_CHECK_COMMAND, \
-    DEFAULT_CHECK_COMMAND, TESSERACT_DATA_PATH_VAR
+from constants import VALID_IMAGE_EXTENSIONS, WINDOWS_CHECK_COMMAND, DEFAULT_CHECK_COMMAND, TESSERACT_DATA_PATH_VAR
 
 
 def create_directory(path):
@@ -42,14 +41,14 @@ def get_command():
 def run_tesseract(filename, output_path, image_file_name):
     # Run tesseract
     filename_without_extension = os.path.splitext(filename)[0]
-    #If no output path is provided
-    if output_path == None:
+    # If no output path is provided
+    if not output_path:
         temp_dir = tempfile.mkdtemp()
         temp_file = os.path.join(temp_dir, filename_without_extension)
         subprocess.run(['tesseract', image_file_name, temp_file],
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE)
-        with open('{}.txt'.format(temp_file), 'r', encoding="utf8") as f: 
+                       stdout=subprocess.PIPE,
+                       stderr=subprocess.PIPE)
+        with open('{}.txt'.format(temp_file), 'r', encoding="utf8") as f:
             text = f.read()
         shutil.rmtree(temp_dir)
         return text
@@ -114,7 +113,7 @@ def main(input_path, output_path):
         logging.error("Nothing found at `{}`".format(input_path))
         return
     # Create output directory
-    if output_path != None:
+    if output_path:
         create_directory(output_path)
 
     # Check if input_path is directory or file
