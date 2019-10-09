@@ -36,6 +36,8 @@ def get_command():
     if sys.platform.startswith('win'):
         return WINDOWS_CHECK_COMMAND
     return DEFAULT_CHECK_COMMAND
+
+
 def run_tesseract(filename, output_path, image_file_name):
     # Run tesseract
     filename_without_extension = os.path.splitext(filename)[0]
@@ -99,6 +101,7 @@ def check_pre_requisites_tesseract():
     else:
         return True
 
+
 def main(input_path, output_path):
     # Check if tesseract is installed or not
     if not check_pre_requisites_tesseract():
@@ -108,7 +111,7 @@ def main(input_path, output_path):
     if not check_path(input_path):
         logging.error("Nothing found at `{}`".format(input_path))
         return
-        
+
     # Create output directory
     if output_path:
         create_directory(output_path)
@@ -168,7 +171,7 @@ if __name__ == '__main__':
         parser.error('Required --input')
     else:
         input_path = os.path.abspath(args.input)
-    
+
     if args.output_dir:
         output_path = os.path.abspath(args.output_dir)
     else:
@@ -180,7 +183,7 @@ if __name__ == '__main__':
         logging.getLogger().setLevel(logging.INFO)
 
     logging.debug("Input Path is {}".format(input_path))
-    
+
     # Check Python version
     if sys.version_info[0] < 3:
         logging.error("You are using Python {0}.{1}. Please use Python>=3".format(
