@@ -37,7 +37,6 @@ def get_command():
     if sys.platform.startswith('win'):
         return WINDOWS_CHECK_COMMAND
     return DEFAULT_CHECK_COMMAND
-
 def run_tesseract(filename, output_path, image_file_name):
     # Run tesseract
     filename_without_extension = os.path.splitext(filename)[0]
@@ -110,13 +109,15 @@ def main(input_path, output_path):
     if not check_path(input_path):
         logging.error("Nothing found at `{}`".format(input_path))
         return
+        
     # Create output directory
     if output_path != None:
         create_directory(output_path)
+        logging.debug("Creating Output Path {}".format(output_path))
 
     # Check if input_path is directory or file
     if os.path.isdir(input_path):
-
+        logging.debug("The Input Path is a directory.")
         # Check if input directory is empty or not
         total_file_count = len(os.listdir(input_path))
         if total_file_count == 0:
@@ -153,25 +154,22 @@ def main(input_path, output_path):
 
     else:
         filename = os.path.basename(input_path)
-        run_tesseract(filename, output_path, filename)
+        logging.debug("The Input Path is a file {}".format(filename))
+        print(run_tesseract(filename, output_path, input_path))
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--input_dir', help="Input directory where input images are stored")
-    parser.add_argument('--input_file', help="Input image filepath")
+    parser.add_argument('--input', help="Input image filepath or directory where input images are stored")
     parser.add_argument('--output_dir', help="(Optional) Output directory for converted text")
     parser.add_argument('--debug', action='store_true', help="Enable verbose DEBUG logging")
 
     args = parser.parse_args()
-    if not args.input_dir and not args.input_file:
-        parser.error('Required either --input_file or --input_dir')
-
-    if args.input_dir:
-        input_path = os.path.abspath(args.input_dir)
+    if not args.input:
+        parser.error('Required --input')
     else:
-        input_path = os.path.abspath(args.input_file)
-
+        input_path = os.path.abspath(args.input)
+    
     if args.output_dir:
         output_path = os.path.abspath(args.output_dir)
     else:
@@ -182,6 +180,8 @@ if __name__ == '__main__':
     else:
         logging.getLogger().setLevel(logging.INFO)
 
+    logging.debug("Input Path is {}".format(input_path))
+    
     # Check Python version
     if sys.version_info[0] < 3:
         logging.error("You are using Python {0}.{1}. Please use Python>=3".format(
