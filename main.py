@@ -162,18 +162,18 @@ def main(input_path, output_path):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--input', help="Input image filepath or directory where input images are stored")
-    parser.add_argument('--output_dir', help="(Optional) Output directory for converted text")
-    parser.add_argument('--debug', action='store_true', help="Enable verbose DEBUG logging")
+    parser._action_groups.pop()
+    required = parser.add_argument_group('required arguments')
+    optional = parser.add_argument_group('optional arguments')
+    required.add_argument('-i', '--input', help="Single image file path or images directory path", required=True)
+    optional.add_argument('-o', '--output', help="(Optional) Output directory for converted text")
+    optional.add_argument('-d', '--debug', action='store_true', help="Enable verbose DEBUG logging")
 
     args = parser.parse_args()
-    if not args.input:
-        parser.error('Required --input')
-    else:
-        input_path = os.path.abspath(args.input)
+    input_path = os.path.abspath(args.input)
 
-    if args.output_dir:
-        output_path = os.path.abspath(args.output_dir)
+    if args.output:
+        output_path = os.path.abspath(args.output)
     else:
         output_path = None
 

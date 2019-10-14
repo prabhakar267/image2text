@@ -8,26 +8,25 @@ Python wrapper to grab text from all the images in a directory and save a subdir
 ## Usage
 #### Run
 ```
-python main.py --input_dir <input_directory> --output_dir <output_directory>
+python main.py -i <input_directory> -o <output_directory>
 ```
 ```
-main.py [-h] [--input_dir INPUT_DIR] [--input_file INPUT_FILE] [--output_dir [OUTPUT_DIR]] [--debug]
+usage: main.py [-h] -i INPUT [-o OUTPUT] [-d]
 
 required arguments:
-  input_dir
-  output_dir
+  -i INPUT, --input INPUT       Single image file path or images directory path
 
 optional arguments:
-  -h, --help  show this help message and exit
+  -o OUTPUT, --output OUTPUT    (Optional) Output directory for converted text
+  -d, --debug                   Enable verbose DEBUG logging
 ```
-`output_dir` is optional. Defaults to `input_dir + '/converted_text/'`
 #### Example
 ```
-python main.py --input_dir sample/
+python main.py -i sample/
 ```
 or
 ```
-python main.py --input_dir sample/ --output_dir output/
+python main.py -i sample/ -o output/
 ```
 
 #### Run Tests
