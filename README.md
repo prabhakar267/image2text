@@ -1,14 +1,22 @@
-# Convert Image to Text
-[![Build Status](https://api.travis-ci.org/prabhakar267/ocr-convert-image-to-text.svg?branch=master)](https://travis-ci.org/prabhakar267/ocr-convert-image-to-text)
+# Image2Text
+[![Build Status](https://api.travis-ci.org/prabhakar267/image2text.svg?branch=master)](https://travis-ci.org/prabhakar267/image2text)
 
-Python wrapper to grab text from all the images in a directory and save a subdirectory as text files using [Tesseract Engine](https://github.com/tesseract-ocr/tesseract).
+**Image2Text** is a python wrapper to grab text from images and save as text files using [Google Tesseract Engine](https://github.com/tesseract-ocr/tesseract). Tesseract is an optical character recognition engine for various operating systems. It is free software, released under the Apache License, Version 2.0, and development has been sponsored by Google since 2006. In 2006 Tesseract was considered one of the most accurate open-source OCR engines then available.
 
-> Tesseract is an optical character recognition engine for various operating systems. It is free software, released under the Apache License, Version 2.0, and development has been sponsored by Google since 2006. In 2006 Tesseract was considered one of the most accurate open-source OCR engines then available.
+**Quick Links:**
++ [Usage](#usage)
+    + [Running Tests](#running-tests)
++ [Tesseract Installation](#tesseract-installation)
+    + [Linux](#linux)
+    + [Windows](#windows)
++ [Sample Results](#sample-results)
+    + [Sample Image](#sample-image)
+    + [Text output](#text-output)
 
-## Usage
-#### Run
-```
-python main.py -i <input_directory> -o <output_directory>
+
+# Usage
+```shell
+python main.py -i <input_path> -o <output_path>
 ```
 ```
 usage: main.py [-h] -i INPUT [-o OUTPUT] [-d]
@@ -20,8 +28,8 @@ optional arguments:
   -o OUTPUT, --output OUTPUT    (Optional) Output directory for converted text
   -d, --debug                   Enable verbose DEBUG logging
 ```
-#### Example
-```
+
+```shell
 python main.py -i sample/
 ```
 or
@@ -29,32 +37,27 @@ or
 python main.py -i sample/ -o output/
 ```
 
-#### Run Tests
+## Running Tests
 ```
 python -m unittest
 ```
 
-## Tesseract Installation
-#### Linux
-
+# Tesseract Installation
+## Linux
 ```
 [sudo] apt-get install tesseract-ocr
 ```
-#### Windows
-1. Install tesseract-ocr from UB Mannheim here: https://github.com/UB-Mannheim/tesseract/wiki
-2. Add the installed Tesseract-OCR directory path to PATH system variable
+## Windows
+1. Install tesseract-ocr from UB Mannheim here: [https://github.com/UB-Mannheim/tesseract/wiki](https://github.com/UB-Mannheim/tesseract/wiki)
+2. Add the installed Tesseract-OCR directory path to `PATH` system variable
 
-
-### Sample image taken
-
-(Wikipedia page for Google | Lang : Simple English)
-
+# Sample Results
+## Sample Image
+**(Wikipedia page for Google | Lang : Simple English)**
 ![](/sample/file-page1.jpg?raw=true)
 
-### Text output
+## Text output
 ```
- 
-
 A man signing in at Google’s main aﬁce, Googleplex.
 
 Google Inc. is an American multinational corporation
@@ -142,9 +145,6 @@ which is 1 followed by one googol of zeroes.
 
 ```
 
-### Stargazers over time
+## Stargazers over time
 
-[![Stargazers over time](https://starcharts.herokuapp.com/prabhakar267/ocr-convert-image-to-text.svg)](https://starcharts.herokuapp.com/prabhakar267/ocr-convert-image-to-text)
-
-
-      
+[![Stargazers over time](https://starcharts.herokuapp.com/prabhakar267/image2text.svg)](https://starcharts.herokuapp.com/prabhakar267/image2text)
