@@ -58,7 +58,7 @@ python -m unittest
 
 ## Text output
 ```
-A man signing in at Google’s main aﬁce, Googleplex.
+A man signing in at Google’s main ofﬁce, Googleplex.
 
 Google Inc. is an American multinational corporation
 that is best known for running one of the largest search
@@ -86,7 +86,7 @@ NASDAQ under the tickers GOOG and GOOGL.
 In August 2015, Google announced it was being restruc-
 tured under a new holding company called Alphabet Inc.
 
-1 History
+1. History
 
 Google was started in early 1996 by Larry Page and
 Sergey Brin, two students at Stanford University, USA.
@@ -111,7 +111,7 @@ Partner Solutions Organization (PSO) which helps make
 contracts, helps making accounts better, and gives engi-
 neering help.
 
-2 How Google makes money
+2. How Google makes money
 
 Google makes money by advertising. People or compa-
 nies who want people to buy their product, service, or
@@ -126,7 +126,7 @@ and other data, Google makes a proﬁle about the person,
 which it then uses to ﬁgure out which advertisements to
 show.
 
-3 The name “Google”
+3. The name “Google”
 
 The name “Google” is a misspelling of the word
 g00g01.[7][8] Milton Sirotta, nephew of US. mathemati-
