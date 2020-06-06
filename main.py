@@ -5,6 +5,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import concurrent.futures
 
 from constants import VALID_IMAGE_EXTENSIONS, WINDOWS_CHECK_COMMAND, DEFAULT_CHECK_COMMAND, TESSERACT_DATA_PATH_VAR
 
@@ -102,6 +103,15 @@ def check_pre_requisites_tesseract():
         return True
 
 
+successful_files = 0
+
+
+def run_check(fn, op, ifn):
+    global successful_files
+    print(run_tesseract(fn, op, ifn))
+    successful_files += 1
+
+
 def main(input_path, output_path):
     # Check if tesseract is installed or not
     if not check_pre_requisites_tesseract():
@@ -129,19 +139,32 @@ def main(input_path, output_path):
         # Iterate over all images in the input directory
         # and get text from each image
         other_files = 0
-        successful_files = 0
         logging.info("Found total {} file(s)\n".format(total_file_count))
-        for ctr, filename in enumerate(os.listdir(input_path)):
-            logging.debug("Parsing {}".format(filename))
-            extension = os.path.splitext(filename)[1]
 
-            if extension.lower() not in VALID_IMAGE_EXTENSIONS:
-                other_files += 1
-                continue
+        with concurrent.futures.ProcessPoolExecutor() as executor:
+            screnshots_filename_list = []
 
-            image_file_name = os.path.join(input_path, filename)
-            print(run_tesseract(filename, output_path, image_file_name))
-            successful_files += 1
+            for ctr, filename in enumerate(os.listdir(input_path)):
+                logging.debug("Parsing {}".format(filename))
+                extension = os.path.splitext(filename)[1]
+
+                if extension.lower() not in VALID_IMAGE_EXTENSIONS:
+                    other_files += 1
+                    continue
+
+                image_file_name = os.path.join(input_path, filename)
+                screnshots_filename_list.append({'image_file_name': image_file_name, 'filename': filename})
+
+            screenshots_futures = {
+                executor.submit(run_check, screenshot['filename'], output_path, screenshot['image_file_name']
+                                ): screenshot for screenshot in screnshots_filename_list}
+
+            for future in concurrent.futures.as_completed(screenshots_futures):
+                text = screenshots_futures[future]
+                try:
+                    data = future.result()
+                except Exception as exc:
+                    print("{} generated an exception: {}".format(text, exc))
 
         logging.info("Parsing Completed!\n")
         if successful_files == 0:
@@ -189,5 +212,4 @@ if __name__ == '__main__':
         logging.error("You are using Python {0}.{1}. Please use Python>=3".format(
             sys.version_info[0], sys.version_info[1]))
         exit()
-
     main(input_path, output_path)
