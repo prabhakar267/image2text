@@ -142,7 +142,7 @@ def main(input_path, output_path):
         logging.info("Found total {} file(s)\n".format(total_file_count))
 
         with concurrent.futures.ProcessPoolExecutor() as executor:
-            screnshots_filename_list = []
+            image_files_list = []
 
             for ctr, filename in enumerate(os.listdir(input_path)):
                 logging.debug("Parsing {}".format(filename))
@@ -153,11 +153,11 @@ def main(input_path, output_path):
                     continue
 
                 image_file_name = os.path.join(input_path, filename)
-                screnshots_filename_list.append({'image_file_name': image_file_name, 'filename': filename})
+                image_files_list.append({'image_file_name': image_file_name, 'filename': filename})
 
             screenshots_futures = {
-                executor.submit(run_check, screenshot['filename'], output_path, screenshot['image_file_name']
-                                ): screenshot for screenshot in screnshots_filename_list}
+                executor.submit(run_check, image_file['filename'], output_path, image_file['image_file_name']
+                                ): image_file for image_file in image_files_list}
 
             for future in concurrent.futures.as_completed(screenshots_futures):
                 text = screenshots_futures[future]
