@@ -147,4 +147,4 @@ which is 1 followed by one googol of zeroes.
 
 ## Stargazers over time
 
-[![Stargazers over time](https://starcharts.herokuapp.com/prabhakar267/image2text.svg)](https://starcharts.herokuapp.com/prabhakar267/image2text)
+[![Stargazers over time](https://starchart.cc/prabhakar267/image2text.svg)](https://starchart.cc/prabhakar267/image2text)
