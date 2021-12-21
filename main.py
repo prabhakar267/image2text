@@ -9,15 +9,6 @@ import tempfile
 from constants import VALID_IMAGE_EXTENSIONS, WINDOWS_CHECK_COMMAND, DEFAULT_CHECK_COMMAND, TESSERACT_DATA_PATH_VAR
 
 
-def create_directory(path):
-    """
-    Create directory at given path if directory does not exist
-    :param path:
-    :return:
-    """
-    if not os.path.exists(path):
-        os.makedirs(path)
-
 
 def check_path(path):
     """
@@ -25,7 +16,7 @@ def check_path(path):
     :param path:
     :return: boolean
     """
-    return bool(os.path.exists(path))
+    return os.path.exists(path) 
 
 
 def get_command():
@@ -41,22 +32,10 @@ def get_command():
 def run_tesseract(filename, output_path, image_file_name):
     # Run tesseract
     filename_without_extension = os.path.splitext(filename)[0]
-    # If no output path is provided
-    if not output_path:
-        temp_dir = tempfile.mkdtemp()
-        temp_file = os.path.join(temp_dir, filename_without_extension)
-        subprocess.run(['tesseract', image_file_name, temp_file],
-                       stdout=subprocess.PIPE,
-                       stderr=subprocess.PIPE)
-        with open('{}.txt'.format(temp_file), 'r', encoding="utf8") as f:
-            text = f.read()
-        shutil.rmtree(temp_dir)
-        return text
     text_file_path = os.path.join(output_path, filename_without_extension)
     subprocess.run(['tesseract', image_file_name, text_file_path],
                    stdout=subprocess.PIPE,
                    stderr=subprocess.PIPE)
-    return
 
 
 def check_pre_requisites_tesseract():
@@ -113,9 +92,17 @@ def main(input_path, output_path):
         return
 
     # Create output directory
+    output_folder_path = None
+    
     if output_path:
-        create_directory(output_path)
-        logging.debug("Creating Output Path {}".format(output_path))
+        output_folder_path = output_path
+
+    else:
+        output_folder_path = 'output'
+        logging.debug("Output path not specified")
+
+    logging.debug("Creating Output Path {}".format(output_folder_path))
+    os.makedirs(output_folder_path,exist_ok=True)
 
     # Check if input_path is directory or file
     if os.path.isdir(input_path):
@@ -140,7 +127,7 @@ def main(input_path, output_path):
                 continue
 
             image_file_name = os.path.join(input_path, filename)
-            print(run_tesseract(filename, output_path, image_file_name))
+            run_tesseract(filename, output_folder_path, image_file_name)
             successful_files += 1
 
         logging.info("Parsing Completed!\n")
@@ -157,7 +144,7 @@ def main(input_path, output_path):
     else:
         filename = os.path.basename(input_path)
         logging.debug("The Input Path is a file {}".format(filename))
-        print(run_tesseract(filename, output_path, input_path))
+        run_tesseract(filename, output_folder_path, input_path)
 
 
 if __name__ == '__main__':
