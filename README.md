@@ -51,6 +51,11 @@ python -m unittest
 1. Install tesseract-ocr from UB Mannheim here: [https://github.com/UB-Mannheim/tesseract/wiki](https://github.com/UB-Mannheim/tesseract/wiki)
 2. Add the installed Tesseract-OCR directory path to `PATH` system variable
 
+## Mac
+```
+brew install tesseract
+```
+
 # Sample Results
 ## Sample Image
 **(Wikipedia page for Google | Lang : Simple English)**
