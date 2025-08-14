@@ -251,65 +251,114 @@ def process_images_parallel(image_files, output_path, max_workers=None):
     return successful_files, failed_files, results
 
 
-def main(input_path, output_path, max_workers=None):
+def validate_and_setup(input_path, output_path):
+    """
+    Validate prerequisites and setup output directory
+    :param input_path: Input path to validate
+    :param output_path: Output path to create if needed
+    :return: True if validation passes, False otherwise
+    """
     # Check if tesseract is installed or not
     if not check_pre_requisites_tesseract():
-        return
+        return False
 
     # Check if a valid input directory is given or not
     if not check_path(input_path):
         logging.error("Nothing found at `{}`".format(input_path))
-        return
+        return False
 
     # Create output directory
     if output_path:
         create_directory(output_path)
         logging.debug("Creating Output Path {}".format(output_path))
 
-    # Check if input_path is directory or file
-    if os.path.isdir(input_path):
-        logging.debug("The Input Path is a directory.")
+    return True
 
-        # Get valid image files efficiently
-        image_files, other_files = get_valid_image_files(input_path)
 
-        if len(image_files) == 0:
-            logging.error("No valid image files found at your input location")
-            logging.error(
-                "Supported formats: [{}]".format(", ".join(VALID_IMAGE_EXTENSIONS))
-            )
-            return
+def process_directory(input_path, output_path, max_workers):
+    """
+    Process all images in a directory
+    :param input_path: Directory containing images
+    :param output_path: Output directory for text files
+    :param max_workers: Number of parallel workers
+    """
+    logging.debug("The Input Path is a directory.")
 
-        total_file_count = len(image_files) + other_files
-        logging.info(
-            "Found total {} file(s) ({} valid images, {} other files)\n".format(
-                total_file_count, len(image_files), other_files
-            )
+    # Get valid image files efficiently
+    image_files, other_files = get_valid_image_files(input_path)
+
+    if len(image_files) == 0:
+        logging.error("No valid image files found at your input location")
+        logging.error(
+            "Supported formats: [{}]".format(", ".join(VALID_IMAGE_EXTENSIONS))
         )
+        return
 
-        # Process images in parallel
-        successful_files, failed_files, results = process_images_parallel(image_files, output_path, max_workers)
+    total_file_count = len(image_files) + other_files
+    logging.info(
+        "Found total {} file(s) ({} valid images, {} other files)\n".format(
+            total_file_count, len(image_files), other_files
+        )
+    )
 
-        # Print results if not writing to files
-        if not output_path:
-            for filename, text in results:
-                print(f"\n=== {filename} ===")
-                print(text)
+    # Process images in parallel
+    successful_files, failed_files, results = process_images_parallel(image_files, output_path, max_workers)
 
-        logging.info("Parsing Completed!\n")
-        logging.info("Successfully parsed images: {}".format(successful_files))
-        if failed_files > 0:
-            logging.warning("Failed to parse images: {}".format(failed_files))
-        if other_files > 0:
-            logging.info("Files with unsupported file extensions: {}".format(other_files))
-
-    else:
-        filename = os.path.basename(input_path)
-        logging.debug("The Input Path is a file {}".format(filename))
-        image_path = Path(input_path)
-        success, text, _ = run_tesseract_optimized(image_path, output_path)
-        if success and text:
+    # Print results if not writing to files
+    if not output_path:
+        for filename, text in results:
+            print(f"\n=== {filename} ===")
             print(text)
+
+    # Log final results
+    log_processing_results(successful_files, failed_files, other_files)
+
+
+def process_single_file(input_path, output_path):
+    """
+    Process a single image file
+    :param input_path: Path to the image file
+    :param output_path: Output directory for text file
+    """
+    filename = os.path.basename(input_path)
+    logging.debug("The Input Path is a file {}".format(filename))
+    image_path = Path(input_path)
+    success, text, _ = run_tesseract_optimized(image_path, output_path)
+    if success and text:
+        print(text)
+
+
+def log_processing_results(successful_files, failed_files, other_files):
+    """
+    Log the results of image processing
+    :param successful_files: Number of successfully processed files
+    :param failed_files: Number of failed files
+    :param other_files: Number of non-image files
+    """
+    logging.info("Parsing Completed!\n")
+    logging.info("Successfully parsed images: {}".format(successful_files))
+    if failed_files > 0:
+        logging.warning("Failed to parse images: {}".format(failed_files))
+    if other_files > 0:
+        logging.info("Files with unsupported file extensions: {}".format(other_files))
+
+
+def main(input_path, output_path, max_workers=None):
+    """
+    Main function to process images and extract text using OCR
+    :param input_path: Path to input file or directory
+    :param output_path: Path to output directory
+    :param max_workers: Number of parallel workers
+    """
+    # Validate prerequisites and setup
+    if not validate_and_setup(input_path, output_path):
+        return
+
+    # Process based on input type
+    if os.path.isdir(input_path):
+        process_directory(input_path, output_path, max_workers)
+    else:
+        process_single_file(input_path, output_path)
 
 
 if __name__ == "__main__":
